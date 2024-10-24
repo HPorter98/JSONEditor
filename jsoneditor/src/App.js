@@ -1,12 +1,5 @@
 import './App.css';
 import { useState } from 'react';
-import { Container, Row, Col } from 'reactstrap';
-import Position from './Components/Position';
-import Orientation from './Components/Orientation';
-import Size from './Components/Size';
-import Lighting from './Components/Lighting';
-import Settings from './Components/Settings';
-import BreadcrumbsPos from './Components/BreadcrumbsPos';
 import TriggerForm from './Components/TriggerForm';  
 
 function App() {
@@ -83,9 +76,8 @@ function App() {
     return (
       <div>
         <TriggerForm data={data} index={index} updateTrigger={updateTrigger}/>
-        <p>{index} / {data.Triggers.length - 1}</p>
-        <button onClick={decrementindex}>Prev</button>
-        <button onClick={incrementindex}>Next</button>
+        {/* <button onClick={decrementindex}>Prev</button>
+        <button onClick={incrementindex}>Next</button> */}
         <button onClick={downloadFile}> Download </button>
         <button onClick={addExample}> Add Example </button>
         {/* <button onClick={deleteTrigger}>Delete</button> */}
