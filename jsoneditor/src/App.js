@@ -5,9 +5,9 @@ import TriggerForm from './Components/TriggerForm';
 function App() {
 
   const [file, setFile] = useState()
+  const [hasFile, setHasFile] = useState(false)
   const [data, setData] = useState()
   const [length, setLength] = useState(0)
-  const [index, setIndex] = useState(0)
 
   function handleChange(event) {
     setFile(event.target.files[0])
@@ -16,23 +16,12 @@ function App() {
       var data = JSON.parse(e.target.result);
       setData(data);
       setLength(data.Triggers.length - 1);
+      setHasFile(true)
       
     };
 
     reader.readAsText(event.target.files[0])
     
-  }
-
-  function decrementindex() {
-    if(index > 0) {
-      setIndex(index - 1)
-    }
-  }
-
-  function incrementindex() {
-    if(index < data.Triggers.length - 1){
-      setIndex(index + 1)
-    }
   }
 
   const downloadFile = () =>{
@@ -51,36 +40,19 @@ function App() {
     URL.revokeObjectURL(href);
   }
 
-  function addExample(){
-    let temp = data;
-
-    data.Triggers.push(data.Triggers[0]);
-
-    setData(data);
-    setLength(length + 1);
-  }
-
   function updateTrigger(temp) {
     const newTriggers = {
       Triggers: temp
     }
-    //setData([...data.Triggers, temp]);
     setData(newTriggers);
-  }
-
-  function deleteTrigger() {
-    setData(data.Triggers.filter(trigger => trigger[index] !== data.Triggers[index]))
   }
 
   function renderTrigger() {
     return (
       <div>
-        <TriggerForm data={data} index={index} updateTrigger={updateTrigger}/>
-        {/* <button onClick={decrementindex}>Prev</button>
-        <button onClick={incrementindex}>Next</button> */}
-        <button onClick={downloadFile}> Download </button>
-        <button onClick={addExample}> Add Example </button>
-        {/* <button onClick={deleteTrigger}>Delete</button> */}
+        <TriggerForm data={data} updateTrigger={updateTrigger}/>
+        <br />
+        <button style={{marginTop: "5px"}}onClick={downloadFile}> Download </button>
       </div>
     )
   }
@@ -89,7 +61,8 @@ function App() {
     <div className="App">
       <form>
         <h1>DayZ cfgundergroundtriggers Editor </h1>
-        <input type="file" onChange={handleChange}/>
+        <input type="file" onChange={handleChange} disabled={hasFile}/>
+        <button onChange={() => setFile('')}>Reset</button>
       </form>
 
       {length < 1 ? <></> : renderTrigger()}

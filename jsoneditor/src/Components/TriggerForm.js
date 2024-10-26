@@ -56,61 +56,48 @@ function TriggerForm({data, updateTrigger}) {
 
     function updateValues() {
         var temp = data.Triggers
-
-        console.log("update: ", temp[triggerIndex]);
         
         if (tempPosX !== '') {
-            //newTrigger.Position[0] = parseFloat(tempPosX)
             temp[triggerIndex].Position[0] = parseFloat(tempPosX)    
         }
 
         if (tempPosY !== '') {
-            //newTrigger.Position[1] = parseFloat(tempPosY)
             temp[triggerIndex].Position[1] = parseFloat(tempPosY)    
         }
 
         if (tempPosZ !== '') {
-            //newTrigger.Position[2] = parseFloat(tempPosZ)
             temp[triggerIndex].Position[2] = parseFloat(tempPosZ)    
         }
 
         if (tempOriX !== '') {
-            //newTrigger.Orientation[0] = parseFloat(tempOriX)
             temp[triggerIndex].Orientation[0] = parseFloat(tempOriX)    
         }
 
         if (tempOriY !== '') {
-            //newTrigger.Orientation[1] = parseFloat(tempOriY)
             temp[triggerIndex].Orientation[1] = parseFloat(tempOriY)    
         }
 
         if (tempOriZ !== '') {
-            //newTrigger.Orientation[2] = parseFloat(tempOriZ)
             temp[triggerIndex].Orientation[2] = parseFloat(tempOriZ)    
         }
 
         if (tempSizeX !== '') {
-            //newTrigger.Size[0] = parseFloat(tempSizeX)
             temp[triggerIndex].Size[0] = parseFloat(tempSizeX)    
         }
 
         if (tempSizeY !== '') {
-            //newTrigger.Size[1] = parseFloat(tempSizeY)
             temp[triggerIndex].Size[1] = parseFloat(tempSizeY)    
         }
 
         if (tempSizeZ !== '') {
-            //newTrigger.Size[2] = parseFloat(tempSizeZ)
             temp[triggerIndex].Size[2] = parseFloat(tempSizeZ)    
         }
 
         if (tempEyeAccom !== '') {
-            //newTrigger.EyeAccommodation = parseFloat(tempEyeAccom)
             temp[triggerIndex].EyeAccommodation = parseFloat(tempEyeAccom)    
         }
 
         if (tempInterSpeed !== '') {
-            //newTrigger.InterpolationSpeed = parseFloat(tempInterSpeed)
             temp[triggerIndex].InterpolationSpeed = parseFloat(tempInterSpeed)    
         }
 
@@ -140,10 +127,36 @@ function TriggerForm({data, updateTrigger}) {
             } 
         }
 
-        //temp[triggerIndex] = newTrigger
-
         updateTrigger(temp);
         resetValues();
+    }
+
+    function addNewTrigger() {
+        var temp = data.Triggers;
+        var newTrigger = {
+            "Position": [
+                0,
+                0,
+                0
+              ],
+              "Orientation": [
+                0,
+                0,
+                0
+              ],
+              "Size": [
+                0,
+                0,
+                0
+              ],
+              "EyeAccommodation": 0,
+              "Breadcrumbs": [],
+              "InterpolationSpeed": 0
+        }
+    
+        temp.push(newTrigger);
+        updateTrigger(temp);
+
     }
 
     function addNewBreadcrumb() {
@@ -220,10 +233,20 @@ function TriggerForm({data, updateTrigger}) {
           }
     }
 
+    function deleteTrigger() {
+        var temp = data.Triggers;
+
+        temp.splice(triggerIndex, 1)
+
+        updateTrigger(temp);
+    }
+
     function renderBreadcrumb() {
         return (
             <>
                 <h3>Breadcrumbs</h3>
+                {data.Triggers[triggerIndex].Breadcrumbs.length > 0 ? <p>{breadIndex + 1}/{data.Triggers[triggerIndex].Breadcrumbs.length} breadcrumbs</p> : <></>}
+                {/* <p>{breadIndex}/{data.Triggers[triggerIndex].Breadcrumbs.length} breadcrumbs</p> */}
                 <Col className='bg-light border'>
                     <h3>Position</h3>
                     <InputGroup id='inputGroup'>
@@ -341,9 +364,6 @@ function TriggerForm({data, updateTrigger}) {
                     </Col>
                 </Row>
                 <Row>
-                    {/* {console.log("Breadcrumbs: ", data.Triggers[triggerIndex].Breadcrumbs.length)}
-                    {console.log(data.Triggers[triggerIndex].Breadcrumbs[breadIndex])} */}
-                    <p>{data.Triggers[triggerIndex].Breadcrumbs.length}</p>
                     {renderBreadcrumb()}
                     {/* {data.Triggers[triggerIndex].Breadcrumbs.length > 1 ? renderBreadcrumb() : <></>} */}
                 </Row>
@@ -351,10 +371,12 @@ function TriggerForm({data, updateTrigger}) {
                 <button onClick={addNewBreadcrumb}>Add Breadcrumb</button>
             </Container>
 
-            <p>{triggerIndex} / {data.Triggers.length - 1}</p>
+            <p>{triggerIndex + 1} / {data.Triggers.length}</p>
 
             <button onClick={decrementTrigIndex}>Prev</button>
             <button onClick={incrementTrigIndex}>Next</button>
+            <button onClick={addNewTrigger}>Add Trigger</button>
+            <button onClick={deleteTrigger}>Delete</button>
         </>
     )
 }
